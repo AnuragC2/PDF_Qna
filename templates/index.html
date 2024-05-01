@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF Text Extraction and Question Answering</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #7063ff, #000000);
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 80%;
+        margin: 50px auto;
+        text-align: center;
+        padding: 30px;
+        background: linear-gradient(to right, #ffffff, #c8c8c8);
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        height: 600px; /* Increased height */
+        overflow-y: auto; /* Added overflow-y for scrolling if content exceeds container height */
+    }
+
+    h2 {
+        color: #333;
+    }
+
+    input[type="file"],
+    input[type="text"],
+    textarea {
+        width: 80%;
+        margin-bottom: 20px;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background: #f1f1f1;
+    }
+
+    input[type="file"] {
+        border: 2px solid transparent;
+        width: 40%;
+        background: linear-gradient(to right, #0dbbef, #4c37aa);
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+
+    input[type="file"]:hover {
+        background: linear-gradient(to right, #0dbbef, #4c37aa);
+        border: 2px solid #0dbbef;
+    }
+
+    input[type="text"],
+    textarea {
+        background: linear-gradient(to right, #0dbbef, #4c37aa);
+        border: 2px solid transparent;
+        height: 50px; /* Increased height */
+        overflow-y: auto;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+        border: 2px solid #0dbbef;
+        outline: none;
+    }
+
+    input[type="button"] {
+        padding: 10px 20px;
+        background: linear-gradient(to right, #0dbbef, #4c37aa);
+        color: rgb(255, 255, 255);
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        transition: background-color 0.3s ease;
+    }
+
+    input[type="button"]:hover {
+        background: linear-gradient(to right, #0dbbef, #4c37aa);
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>PDF Text Extraction and Question Answering</h2>
+    <input type="file" id="fileInput" accept=".pdf">
+    <br>
+    <input type="text" id="questionInput" placeholder="Enter your question...">
+    <br>
+    <input type="button" value="Submit" onclick="submitForm()">
+    <br>
+    <textarea id="outputText" placeholder="Answer will appear here..." readonly></textarea>
+</div>
+
+<script>
+    function submitForm() {
+        var fileInput = document.getElementById("fileInput");
+        var file = fileInput.files[0];
+        var questionInput = document.getElementById("questionInput").value;
+        var formData = new FormData();
+        formData.append("pdfFile", file);
+        formData.append("question", questionInput);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/get_answers", true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                document.getElementById("outputText").value = xhr.responseText;
+            }
+        };
+        xhr.send(formData);
+    }
+</script>
+
+</body>
+</html>
